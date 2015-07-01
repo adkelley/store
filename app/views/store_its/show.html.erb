@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @store_it.name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @store_it.email %>
+</p>
+
+<p>
+  <strong>Password digest:</strong>
+  <%= @store_it.password_digest %>
+</p>
+
+<%= link_to 'Edit', edit_store_it_path(@store_it) %> |
+<%= link_to 'Back', store_its_path %>
