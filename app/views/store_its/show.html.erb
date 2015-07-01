@@ -15,5 +15,10 @@
   <%= @store_it.password_digest %>
 </p>
 
+<p>
+  <strong>API Token</strong>
+  <%= @token.hex_value %>
+</p>
+
 <%= link_to 'Edit', edit_store_it_path(@store_it) %> |
 <%= link_to 'Back', store_its_path %>

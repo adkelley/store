@@ -10,6 +10,7 @@ class StoreItsController < ApplicationController
   # GET /store_its/1
   # GET /store_its/1.json
   def show
+    @token = ApiToken.find_by(store_id: params[:id])
   end
 
   # GET /store_its/new
@@ -28,6 +29,7 @@ class StoreItsController < ApplicationController
 
     respond_to do |format|
       if @store_it.save
+        set_token(@store_it.id)
         format.html { redirect_to @store_it, notice: 'Store it was successfully created.' }
         format.json { render :show, status: :created, location: @store_it }
       else
@@ -67,6 +69,13 @@ class StoreItsController < ApplicationController
       @store_it = StoreIt.find(params[:id])
     end
 
+    def set_token(id)
+      token = ApiToken.new
+      uuid = UUID.new
+      token.hex_value = uuid.generate
+      token.store_id = id
+      token.save
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def store_it_params
       params.require(:store_it).permit(:name, :email, :password, :password_confirmation)
