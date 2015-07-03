@@ -5,8 +5,14 @@ class ReceiptsController < ApplicationController
 
   # GET /receipts
   # GET /receipts.json
+  # curl http://localhost:3000/reciepts -H 'Authorization: Token token="230d43b0-03d0-0133-90ab-2886dda44ec3"'
   def index
-    @receipts = Receipt.all
+    #@receipts = Receipt.all
+    token = ApiToken.find_by(hex_value: @token_string )
+    @receipts = Receipt.where(store_id: token.store_id)
+    respond_to do |format|
+      format.json { render json: @receipts }
+    end
   end
 
   # GET /receipts/1
@@ -76,6 +82,7 @@ class ReceiptsController < ApplicationController
 
     def restrict_access
       authenticate_or_request_with_http_token do |token, options|
+        @token_string = token
         ApiToken.exists?(hex_value: token)
       end
     end
