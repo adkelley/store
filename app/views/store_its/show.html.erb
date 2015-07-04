@@ -2,17 +2,12 @@
 
 <p>
   <strong>Name:</strong>
-  <%= @store_it.name %>
+  <%= @store.name %>
 </p>
 
 <p>
   <strong>Email:</strong>
-  <%= @store_it.email %>
-</p>
-
-<p>
-  <strong>Password digest:</strong>
-  <%= @store_it.password_digest %>
+  <%= @store.email %>
 </p>
 
 <p>
@@ -20,5 +15,5 @@
   <%= @token.hex_value %>
 </p>
 
-<%= link_to 'Edit', edit_store_it_path(@store_it) %> |
+<%= link_to 'Edit', edit_store_it_path(@store) %> |
 <%= link_to 'Back', store_its_path %>
