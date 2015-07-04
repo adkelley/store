@@ -25,16 +25,43 @@ AccountApp.config(["$httpProvider", function ($httpProvider) {
         defaults.headers.common["X-CSRF"] = $("meta[name=csrf-token]").attr("content");
 }]);
 
-AccountApp.controller("MainCtrl", ['$http', function ($http) {
-  var vm = this;
-  
-  var path = window.location.pathname.split('/');
+AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
+  var endpoint = '/store_its/';
+  var path = window.location.pathname.split('/');
+  var id = path[path.length-1];
+  var service = {};
+  var deferred = $q.defer();
+
+  service.current_user = function() {
+    $http
+      .get(endpoint + id + ".json")
+      .success(function (response) {
+        deferred.resolve(response);
+      })
+      .error(function (rejection) {
+        deferred.reject(rejection);
+      });
+
+    return deferred.promise;
+  }
+
+  return service;
+
+}]);
+
+AccountApp.controller("MainCtrl", ['UserService', function (UserService) {
+  var vm = this;
   vm.current_user = null;
-  $http.get("/store_its/" + path[path.length-1] + ".json").
-    success(function (data) {
-      vm.current_user = data;
+  UserService.current_user().then(
+    function(response) {
+      vm.current_user = response;
+    },
+    function(rejection) {
+      vm.current_user = rejection;
     });
+
+  //console.log(vm.current_user);
   
 }]);
 
