@@ -19,6 +19,7 @@
 
 var AccountApp = angular.module("AccountApp", []);
 
-AccountApp.controller("MainCtrl", function ($scope) {
-  $scope.greeting = "Hello World";
-});
+AccountApp.controller("MainCtrl", [function () {
+  var vm = this;
+  vm.greeting = "Hello World";
+}]);
