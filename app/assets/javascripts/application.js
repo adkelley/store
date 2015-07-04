@@ -50,7 +50,7 @@ AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
 }]);
 
-AccountApp.controller("MainCtrl", ['UserService', function (UserService) {
+AccountApp.controller("UserCtrl", ['UserService', function (UserService) {
   var vm = this;
   vm.current_user = null;
   UserService.current_user().then(

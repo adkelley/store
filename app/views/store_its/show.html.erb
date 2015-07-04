@@ -1,25 +1,25 @@
 <p id="notice"><%= notice %></p>
 
 <div ng-app="AccountApp">
-  <div ng-controller="MainCtrl as vm">
-    {{vm.current_user}}
+  <div ng-controller="UserCtrl as vm">
+
+    <p>
+      <strong>Name:</strong>
+      {{vm.current_user.name}}
+    </p>
+
+    <p>
+      <strong>Email:</strong>
+      {{vm.current_user.email}}
+    </p>
+
+    <p>
+      <strong>API Token</strong>
+      <%= @token.hex_value %>
+    </p>
+
   </div>
 </div>
-
-<p>
-  <strong>Name:</strong>
-  <%= @store.name %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @store.email %>
-</p>
-
-<p>
-  <strong>API Token</strong>
-  <%= @token.hex_value %>
-</p>
 
 <%= link_to 'Edit', edit_store_it_path(@store) %> |
 <%= link_to 'Back', store_its_path %>
