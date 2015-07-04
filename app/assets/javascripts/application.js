@@ -19,7 +19,27 @@
 
 var AccountApp = angular.module("AccountApp", []);
 
-AccountApp.controller("MainCtrl", [function () {
+// CSRF param to allow angular to post/patch to rails server
+AccountApp.config(["$httpProvider", function ($httpProvider) {
+    $httpProvider.
+        defaults.headers.common["X-CSRF"] = $("meta[name=csrf-token]").attr("content");
+}]);
+
+AccountApp.controller("MainCtrl", ['$http', function ($http) {
   var vm = this;
   vm.greeting = "Hello World";
+
+  vm.current_user = null;
+  $http.get("/store_its/1.json").
+    success(function (data) {
+      vm.current_user = data;
+    }).
+    error(function (rejection) {
+      vm.current_user = "problem friend"
+    });
 }]);
+
+
+
+
+

@@ -13,6 +13,11 @@ class StoreItsController < ApplicationController
   # GET /store_its/1.json
   def show
     @token = ApiToken.find_by(store_id: params[:id])
+    
+    respond_to do |f|
+      f.html
+      f.json { render json: current_user }
+    end
   end
 
   # GET /store_its/new
