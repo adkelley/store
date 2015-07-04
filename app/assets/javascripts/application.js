@@ -16,3 +16,9 @@
 //= require turbolinks
 //= require angular/angular
 //= require_tree .
+
+var AccountApp = angular.module("AccountApp", []);
+
+AccountApp.controller("MainCtrl", function ($scope) {
+  $scope.greeting = "Hello World";
+});
