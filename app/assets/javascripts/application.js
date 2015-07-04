@@ -27,16 +27,15 @@ AccountApp.config(["$httpProvider", function ($httpProvider) {
 
 AccountApp.controller("MainCtrl", ['$http', function ($http) {
   var vm = this;
-  vm.greeting = "Hello World";
+  
+  var path = window.location.pathname.split('/');
 
   vm.current_user = null;
-  $http.get("/store_its/1.json").
+  $http.get("/store_its/" + path[path.length-1] + ".json").
     success(function (data) {
       vm.current_user = data;
-    }).
-    error(function (rejection) {
-      vm.current_user = "problem friend"
     });
+  
 }]);
 
 

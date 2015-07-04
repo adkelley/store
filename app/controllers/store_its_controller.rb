@@ -14,9 +14,14 @@ class StoreItsController < ApplicationController
   def show
     @token = ApiToken.find_by(store_id: params[:id])
     
-    respond_to do |f|
-      f.html
-      f.json { render json: current_user }
+    if (current_user.id.to_s == params[:id])
+      respond_to do |f|
+        f.html
+        f.json { render json: current_user }
+      end
+    else
+      flash[:danger] = "You cannot view another store's account"
+      redirect_to root_path
     end
   end
 
