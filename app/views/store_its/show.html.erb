@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <div ng-app="AccountApp">
-  <div ng-controller="UserCtrl as vm">
+  <div ng-controller="UserCtrl as vm" ng-cloak>
 
     <p>
       <strong>Name:</strong>
@@ -15,7 +15,7 @@
 
     <p>
       <strong>API Token</strong>
-      <%= @token.hex_value %>
+      {{ vm.token.hex_value }}
       <button class="btn btn-xs btn-warning" ng-click="vm.resetToken()">Reset</button>
     </p>
 

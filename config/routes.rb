@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  get 'tokens/update', to: 'tokens#update'
-  get 'tokens/:id', to: 'tokens#show'
-  get 'tokens/reset/:id', to: 'tokens#reset'
+  # scope :api do
+  #   'tokens#id', defaults: {format: :json}
+  # end
+
+  get 'tokens/:id', to: 'tokens#show', defaults: {format: :json}
+  get 'tokens/reset/:id', to: 'tokens#reset', defaults: {format: :json}
 
   get 'password_resets/new'
   get 'password_resets/edit'

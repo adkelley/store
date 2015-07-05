@@ -86,12 +86,21 @@ AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
 }]);
 
-AccountApp.controller("UserCtrl", ['UserService', 'TokenService', function (UserService, TokenService) {
+AccountApp.controller("UserCtrl", ['UserService', 'TokenService', '$scope',
+                                   function (UserService, TokenService) {
   var vm = this;
   vm.current_user = null;
   UserService.current_user().then(
     function(response) {
       vm.current_user = response;
+      TokenService.get_token(vm.current_user.id).then(
+        function(response) {
+          vm.token = response;
+        },
+        function(rejection){
+          vm.token = rejection;
+        }
+      );
     },
     function(rejection) {
       vm.current_user = rejection;
@@ -99,15 +108,13 @@ AccountApp.controller("UserCtrl", ['UserService', 'TokenService', function (User
 
   vm.resetToken = function() {
     TokenService.reset_token(vm.current_user.id).then(
-      TokenService.get_token(vm.current_user.id).then(
         function(response) {
-          console.log(response);
+          vm.token = response;
         },
         function(rejection){
-          console.log("fail");
+          vm.token = rejection;
         }
       )
-    )
   };
 
 }]);
