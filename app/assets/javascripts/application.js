@@ -25,6 +25,42 @@ AccountApp.config(["$httpProvider", function ($httpProvider) {
         defaults.headers.common["X-CSRF"] = $("meta[name=csrf-token]").attr("content");
 }]);
 
+AccountApp.factory('TokenService', ['$http', '$q', function($http, $q) {
+
+  var token_endpoint = '/tokens/'
+  var service = {};
+  var deferred = $q.defer();
+
+  service.reset_token = function(id) {
+    $http
+      .get(token_endpoint + 'reset/' + id)
+      .success(function (response) {
+        deferred.resolve(response);
+      })
+      .error(function (rejection) {
+        deferred.reject(rejection);
+      });
+
+    return deferred.promise;
+  }
+
+  service.get_token = function(user_id) {
+    $http
+      .get(token_endpoint + user_id)
+      .success(function (response) {
+        deferred.resolve(response);
+      })
+      .error(function (rejection) {
+        deferred.reject(rejection);
+      });
+
+    return deferred.promise;
+  }
+
+  return service;
+
+}]);
+
 AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
   var endpoint = '/store_its/';
@@ -50,7 +86,7 @@ AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
 }]);
 
-AccountApp.controller("UserCtrl", ['UserService', function (UserService) {
+AccountApp.controller("UserCtrl", ['UserService', 'TokenService', function (UserService, TokenService) {
   var vm = this;
   vm.current_user = null;
   UserService.current_user().then(
@@ -61,8 +97,19 @@ AccountApp.controller("UserCtrl", ['UserService', function (UserService) {
       vm.current_user = rejection;
     });
 
-  //console.log(vm.current_user);
-  
+  vm.resetToken = function() {
+    TokenService.reset_token(vm.current_user.id).then(
+      TokenService.get_token(vm.current_user.id).then(
+        function(response) {
+          console.log(response);
+        },
+        function(rejection){
+          console.log("fail");
+        }
+      )
+    )
+  };
+
 }]);
 
 

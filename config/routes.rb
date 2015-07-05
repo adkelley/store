@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'tokens/update', to: 'tokens#update'
+  get 'tokens/:id', to: 'tokens#show'
+  get 'tokens/reset/:id', to: 'tokens#reset'
+
   get 'password_resets/new'
   get 'password_resets/edit'
 
@@ -14,6 +18,8 @@ Rails.application.routes.draw do
 end
 
 #               Prefix Verb   URI Pattern                         Controller#Action
+#        tokens_update GET    /tokens/update(.:format)            tokens#update
+#         tokens_reset GET    /tokens/reset(.:format)             tokens#reset
 #  password_resets_new GET    /password_resets/new(.:format)      password_resets#new
 # password_resets_edit GET    /password_resets/edit(.:format)     password_resets#edit
 #                 root GET    /                                   home#show
@@ -45,4 +51,3 @@ end
 #                      PATCH  /password_resets/:id(.:format)      password_resets#update
 #                      PUT    /password_resets/:id(.:format)      password_resets#update
 #                      DELETE /password_resets/:id(.:format)      password_resets#destroy
-

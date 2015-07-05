@@ -1,8 +1,12 @@
 class StoreItsController < ApplicationController
-  before_action :logged_in_user, :set_store_it, only: [:show, :edit, :update, :destroy, :index]
-  #before_action :logged_in_user, only: [:show, :edit, :update, :destroy]
-  
+  include StoreItsHelper
+  include TokensHelper
 
+  before_action :logged_in_user, only: [:show, :edit, :update, :destroy, :index]
+  before_action :correct_user, only: [:show, :edit, :update, :destroy, :index]
+  before_action :set_store_account, only: [:show, :edit, :update, :destroy, :index]
+
+  
   # GET /store_its
   # GET /store_its.json
   def index
@@ -14,15 +18,11 @@ class StoreItsController < ApplicationController
   def show
     @token = ApiToken.find_by(store_id: params[:id])
     
-    if (current_user.id.to_s == params[:id])
-      respond_to do |f|
-        f.html
-        f.json { render json: current_user }
-      end
-    else
-      flash[:danger] = "You cannot view another store's account"
-      redirect_to root_path
+    respond_to do |f|
+      f.html 
+      f.json { render json: current_user }
     end
+
   end
 
   # GET /store_its/new
@@ -46,6 +46,7 @@ class StoreItsController < ApplicationController
         format.html { redirect_to @store, notice: 'Store was successfully created.' }
         format.json { render :show, status: :created, location: @store }
       else
+        flash[:danger] = "Invalid data, a new store was not created"
         format.html { render :new }
         format.json { render json: @store.errors, status: :unprocessable_entity }
       end
@@ -77,29 +78,14 @@ class StoreItsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_store_it
-      @store = StoreIt.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_store_account
+    @store = StoreIt.find(params[:id])
+  end
 
-    def set_token(id)
-      token = ApiToken.new
-      uuid = UUID.new
-      token.hex_value = uuid.generate
-      token.store_id = id
-      token.save
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def store_it_params
+    params.require(:store_it).permit(:name, :email, :password, :password_confirmation)
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def store_it_params
-      params.require(:store_it).permit(:name, :email, :password, :password_confirmation)
-    end
-
-    # Check whether the user is logged in
-    def logged_in_user
-      unless logged_in?
-        flash[:danger] = "Please Log In!"
-        redirect_to login_path
-      end
-    end
 end
