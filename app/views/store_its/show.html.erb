@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <div ng-app="AccountApp">
-  <div ng-controller="UserCtrl as vm" ng-cloak>
+  <div ng-controller="UserCtrl as vm">
 
     <p>
       <strong>Name:</strong>
@@ -20,7 +20,38 @@
     </p>
 
   </div>
+
+  <div ng-controller="ReceiptCtrl as vm">
+    <label>Receipts: <input type="checkbox" ng-model="checked" ng-init="checked=false; vm.receiptsAll()"
+     /></label></br>
+    <div ng-if="checked">
+      <table class="table table-striped">
+        <tr>
+          <th>Date</td>
+          <th>Transaction #</th>
+          <th>Payment Method</th>
+          <th>Total</th>
+        </tr>
+        <tr ng-repeat="receipt in vm.receipts">
+          <td>{{receipt.created_at | date:'medium'}}</td>
+          <td>{{receipt.transaction_number}}</td>
+          <td>{{receipt.payment_method}}</td>
+          <td>{{receipt.total | currency:'$':2}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
 
 <%= link_to 'Edit', edit_store_it_path(@store) %> |
 <%= link_to 'Back', store_its_path %>
+
+
+
+
+
+
+
+
+
+

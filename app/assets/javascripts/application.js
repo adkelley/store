@@ -64,12 +64,10 @@ AccountApp.factory('TokenService', ['$http', '$q', function($http, $q) {
 AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
   var endpoint = '/store_its/';
-  var path = window.location.pathname.split('/');
-  var id = path[path.length-1];
   var service = {};
   var deferred = $q.defer();
 
-  service.current_user = function() {
+  service.current_user = function(id) {
     $http
       .get(endpoint + id + ".json")
       .success(function (response) {
@@ -86,11 +84,14 @@ AccountApp.factory('UserService', ['$http', '$q', function($http, $q) {
 
 }]);
 
-AccountApp.controller("UserCtrl", ['UserService', 'TokenService', '$scope',
+AccountApp.controller("UserCtrl", ['UserService', 'TokenService',
                                    function (UserService, TokenService) {
   var vm = this;
   vm.current_user = null;
-  UserService.current_user().then(
+  var path = window.location.pathname.split('/');
+  var id = path[path.length-1];
+
+  UserService.current_user(id).then(
     function(response) {
       vm.current_user = response;
       TokenService.get_token(vm.current_user.id).then(
@@ -118,6 +119,49 @@ AccountApp.controller("UserCtrl", ['UserService', 'TokenService', '$scope',
   };
 
 }]);
+
+AccountApp.factory("ReceiptService", [ '$http', '$q', function($http, $q) {
+  var endpoint = '/receipts';
+  var service = {};
+  var deferred = $q.defer();
+
+  service.receipts_all = function() {
+    $http
+      .get(endpoint + ".json")
+      .success(function (response) {
+        deferred.resolve(response);
+      })
+      .error(function (rejection) {
+        deferred.reject(rejection);
+      });
+
+    return deferred.promise;
+  }
+  
+  return service;
+  
+}]);
+
+AccountApp.controller("ReceiptCtrl", [ 'ReceiptService', 'TokenService', function(ReceiptService, TokenService) {
+  var vm = this;
+  var path = window.location.pathname.split('/');
+  var id = path[path.length-1];
+
+  vm.receipts = null;
+  vm.receiptsAll = function() {
+    ReceiptService.receipts_all().then(
+      function(response) {
+        vm.receipts = response;
+      },
+      function(rejection) {
+        console.log("Error: receipts_all");
+      }
+    )
+  }
+
+}]);
+
+
 
 
 

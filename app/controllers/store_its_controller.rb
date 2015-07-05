@@ -1,6 +1,5 @@
 class StoreItsController < ApplicationController
   include StoreItsHelper
-  include TokensHelper
 
   before_action :logged_in_user, only: [:show, :edit, :update, :destroy, :index]
   before_action :correct_user, only: [:show, :edit, :update, :destroy, :index]
@@ -16,8 +15,7 @@ class StoreItsController < ApplicationController
   # GET /store_its/1
   # GET /store_its/1.json
   def show
-    @token = ApiToken.find_by(store_id: params[:id])
-    
+    #@token = ApiToken.find_by(store_id: params[:id])
     respond_to do |f|
       f.html 
       f.json { render json: current_user }

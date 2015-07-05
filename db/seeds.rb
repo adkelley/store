@@ -12,7 +12,7 @@ def create_receipts(num_receipts, store_id)
   prng = Random.new
   num_receipts.times do
     receipt_params = {}
-    receipt_params[:transaction_number] = "XXXXXXXX"
+    receipt_params[:transaction_number] = prng.rand(99999999).to_s
     receipt_params[:payment_method] = "VISA ENDING IN " + prng.rand(9999).to_s
     receipt_params[:amount] = prng.rand(99.99)
     receipt_params[:tip] = receipt_params[:amount] * 0.15

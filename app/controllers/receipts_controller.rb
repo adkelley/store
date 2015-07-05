@@ -1,18 +1,23 @@
 class ReceiptsController < ApplicationController
-  before_filter :restrict_access
-  respond_to :json
+  include StoreItsHelper
+
+  #before_filter :restrict_access
+  before_action :logged_in_user, only: [:show, :edit, :update, :destroy, :index]
   before_action :set_receipt, only: [:show, :edit, :update, :destroy]
+
+  respond_to :json, :html
 
   # GET /receipts
   # GET /receipts.json
   # curl http://localhost:3000/reciepts -H 'Authorization: Token token="230d43b0-03d0-0133-90ab-2886dda44ec3"'
   def index
     #@receipts = Receipt.all
-    token = ApiToken.find_by(hex_value: @token_string )
-    @receipts = Receipt.where(store_id: token.store_id)
-    respond_to do |format|
-      format.json { render json: @receipts }
-    end
+    #token = ApiToken.find_by(hex_value: @token_string )
+    @receipts = Receipt.where(store_id: current_user.id)
+    render json: @receipts
+    # respond_to do |format|
+    #   format.json { render json: @receipts }
+    #end
   end
 
   # GET /receipts/1
